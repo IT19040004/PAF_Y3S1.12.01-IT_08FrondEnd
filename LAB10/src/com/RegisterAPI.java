@@ -1,5 +1,5 @@
 package com;
-
+import com.Register;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,16 +14,16 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * Servlet implementation class ItemsAPI
  */
-@WebServlet("/ItemsAPI")
-public class ItemsAPI extends HttpServlet {
+@WebServlet("/RegisterAPI")
+public class RegisterAPI extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
-	Item itemObj = new Item();
+	Register registerObj = new Register();
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public ItemsAPI() {
+    public RegisterAPI() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -41,9 +41,12 @@ public class ItemsAPI extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-		String output = itemObj.insertItem(request.getParameter("itemCode"), request.getParameter("itemName"),
-				request.getParameter("itemPrice"), request.getParameter("itemDesc"));
-		response.getWriter().write(output);
+		
+		String output = registerObj.insertRegister(request.getParameter("name"),
+				request.getParameter("email"),
+				request.getParameter("password"),
+				request.getParameter("repassword"));
+				response.getWriter().write(output);
 	}
 	
 	
@@ -73,8 +76,8 @@ public class ItemsAPI extends HttpServlet {
 	protected void doPut(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Map paras = getParasMap(request);
-		String output = itemObj.updateItem(paras.get("hidItemIDSave").toString(), paras.get("itemCode").toString(),
-				paras.get("itemName").toString(), paras.get("itemPrice").toString(), paras.get("itemDesc").toString());
+		String output = registerObj.updateRegister(paras.get("hidRegisterIDSave").toString(), paras.get("name").toString(),
+				paras.get("email").toString(), paras.get("password").toString(), paras.get("repassword").toString());
 		response.getWriter().write(output);
 	}
 
@@ -84,7 +87,7 @@ public class ItemsAPI extends HttpServlet {
 	protected void doDelete(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		Map paras = getParasMap(request);
-		String output = itemObj.deleteItem(paras.get("itemID").toString());
+		String output = registerObj.deleteRegister(paras.get("registerid").toString());
 		response.getWriter().write(output);
 	}
 

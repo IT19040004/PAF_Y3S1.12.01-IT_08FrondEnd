@@ -4,7 +4,7 @@ $(document).ready(function() {
 	}
 	$("#alertError").hide();
 });
-// SAVE ============================================
+// SAVE ==============om==============================
 $(document).on("click", "#btnSave", function(event) {
 	// Clear alerts---------------------
 	$("#alertSuccess").text("");
@@ -12,6 +12,10 @@ $(document).on("click", "#btnSave", function(event) {
 	$("#alertError").text("");
 	$("#alertError").hide();
 	// Form validation-------------------
+	
+	
+	
+	
 	var status = validateItemForm();
 	if (status != true) {
 		$("#alertError").text(status);
@@ -19,11 +23,11 @@ $(document).on("click", "#btnSave", function(event) {
 		return;
 	}
 	//If valid------------------------
-	var type = ($("#hidItemIDSave").val() == "") ? "POST" : "PUT";
+	var type = ($("#hidRegisterIDSave").val() == "") ? "POST" : "PUT";
 	$.ajax({
-		url : "ItemsAPI",
+		url : "RegisterAPI",
 		type : type,
-		data : $("#formItem").serialize(),
+		data : $("#formRegister").serialize(),
 		dataType : "text",
 		complete : function(response, status) {
 			onItemSaveComplete(response.responseText, status);
@@ -32,20 +36,20 @@ $(document).on("click", "#btnSave", function(event) {
 });
 // UPDATE==========================================
 $(document).on("click", ".btnUpdate", function(event) {
-	$("#hidItemIDSave").val($(this).data("itemid"));
-	$("#itemCode").val($(this).closest("tr").find('td:eq(0)').text());
-	$("#itemName").val($(this).closest("tr").find('td:eq(1)').text());
-	$("#itemPrice").val($(this).closest("tr").find('td:eq(2)').text());
-	$("#itemDesc").val($(this).closest("tr").find('td:eq(3)').text());
+	$("#hidRegisterIDSave").val($(this).closest("tr").find('#hidRegisterIDUpdate').val());
+	$("#name").val($(this).closest("tr").find('td:eq(0)').text());
+	$("#email").val($(this).closest("tr").find('td:eq(1)').text());
+	$("#password").val($(this).closest("tr").find('td:eq(2)').text());
+	$("#repassword").val($(this).closest("tr").find('td:eq(3)').text());
 });
 
 //Delete
 
 $(document).on("click", ".btnRemove", function(event) {
 	$.ajax({
-		url : "ItemsAPI",
+		url : "RegisterAPI",
 		type : "DELETE",
-		data : "itemID=" + $(this).data("itemid"),
+		data : "registerid=" + $(this).data("registerid"),
 		dataType : "text",
 		complete : function(response, status) {
 			onItemDeleteComplete(response.responseText, status);
@@ -54,30 +58,28 @@ $(document).on("click", ".btnRemove", function(event) {
 });
 // CLIENT-MODEL================================================================
 function validateItemForm() {
-	// CODE
-	if ($("#itemCode").val().trim() == "") {
-		return "Insert Item Code.";
+	// Name
+	if ($("#name").val().trim() == "") {
+		return "Insert User name.";
 	}
-	// NAME
-	if ($("#itemName").val().trim() == "") {
-		return "Insert Item Name.";
+	// Email
+	if ($("#email").val().trim() == "") {
+		return "Insert User email.";
+	}
+	var email = $("#email").val().trim();
+	if (!validateEmail(email)) {
+		return "Insert Valid Email.";
 	}
 
-	//PRICE-------------------------------
-	if ($("#itemPrice").val().trim() == "") {
-		return "Insert Item Price.";
+	//Password
+	if ($("#password").val().trim() == "") {
+		return "Insert User password.";
 	}
-	// is numerical value
-	var tmpPrice = $("#itemPrice").val().trim();
-	if (!$.isNumeric(tmpPrice)) {
-		return "Insert a numerical value for Item Price.";
+	//RePassword
+	if ($("#repassword").val().trim() == "") {
+		return "Insert User repassword.";
 	}
-	// convert to decimal price
-	$("#itemPrice").val(parseFloat(tmpPrice).toFixed(2));
-	// DESCRIPTION------------------------
-	if ($("#itemDesc").val().trim() == "") {
-		return "Insert Item Description.";
-	}
+	
 	return true;
 }
 
@@ -87,7 +89,7 @@ function onItemSaveComplete(response, status) {
 		if (resultSet.status.trim() == "success") {
 			$("#alertSuccess").text("Successfully saved.");
 			$("#alertSuccess").show();
-			$("#divItemsGrid").html(resultSet.data);
+			$("#divRegisterGrid").html(resultSet.data);
 		} else if (resultSet.status.trim() == "error") {
 			$("#alertError").text(resultSet.data);
 			$("#alertError").show();
@@ -100,8 +102,8 @@ function onItemSaveComplete(response, status) {
 		$("#alertError").show();
 	}
 
-	$("#hidItemIDSave").val("");
-	$("#formItem")[0].reset();
+	$("#hidRegisterIDSave").val("");
+	$("#formRegister")[0].reset();
 }
 
 function onItemDeleteComplete(response, status) {
@@ -110,7 +112,7 @@ function onItemDeleteComplete(response, status) {
 		if (resultSet.status.trim() == "success") {
 			$("#alertSuccess").text("Successfully deleted.");
 			$("#alertSuccess").show();
-			$("#divItemsGrid").html(resultSet.data);
+			$("#divRegisterGrid").html(resultSet.data);
 		} else if (resultSet.status.trim() == "error") {
 			$("#alertError").text(resultSet.data);
 			$("#alertError").show();
@@ -122,4 +124,10 @@ function onItemDeleteComplete(response, status) {
 		$("#alertError").text("Unknown error while deleting..");
 		$("#alertError").show();
 	}
+}
+
+function validateEmail(email) 
+{
+    var re = /\S+@\S+\.\S+/;
+    return re.test(email);
 }
