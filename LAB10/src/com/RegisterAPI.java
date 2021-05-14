@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
- * Servlet implementation class ItemsAPI
+ * Servlet implementation class RegisterAPI
  */
 @WebServlet("/RegisterAPI")
 public class RegisterAPI extends HttpServlet {

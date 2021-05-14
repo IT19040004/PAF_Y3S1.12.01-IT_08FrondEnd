@@ -83,8 +83,8 @@ public class Register {
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
-			String newItems = readRegister();
-			output = "{\"status\":\"success\", \"data\": \"" + "" + newItems + "\"}";
+			String newUser = readRegister();
+			output = "{\"status\":\"success\", \"data\": \"" + "" + newUser + "\"}";
 
 		} catch (Exception e) {
 			System.out.println("ERORR : " + e.getMessage());

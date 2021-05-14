@@ -79,6 +79,11 @@ function validateItemForm() {
 	if ($("#repassword").val().trim() == "") {
 		return "Insert User repassword.";
 	}
+	var pwd = $("#password").val().trim();
+	var cpwd = $("#repassword").val().trim();
+	if(!checkPassword(pwd,cpwd)) {
+		return "Password is not matching";
+	}
 	
 	return true;
 }
@@ -130,4 +135,15 @@ function validateEmail(email)
 {
     var re = /\S+@\S+\.\S+/;
     return re.test(email);
+}
+
+function checkPassword(pwd,cpwd)
+{
+
+	if(pwd == cpwd) {
+		return true;
+	}
+	else {
+		return false;
+	}
 }
